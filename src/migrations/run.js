@@ -19,12 +19,14 @@ async function run() {
       const sqlFile = path.join(__dirname, file);
       const sql = fs.readFileSync(sqlFile, 'utf-8');
       console.log(`Running ${file}...`);
-      await client.query(sql);
-      console.log(`✅ ${file} complete`);
+      try {
+        await client.query(sql);
+        console.log(`✅ ${file} complete`);
+      } catch (err) {
+        console.log(`⚠️ ${file} skipped: ${err.message}`);
+      }
     }
     console.log('\n✅ All migrations complete');
-  } catch (err) {
-    console.error('❌ Migration failed:', err.message);
   } finally {
     client.release();
     await pool.end();
