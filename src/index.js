@@ -69,7 +69,7 @@ const PORT = process.env.PORT || 3000;
 
 const start = async () => {
   try {
-    await connectRedis();
+    try { await connectRedis(); } catch(e) { console.log('Redis skipped'); }
     app.listen(PORT, () => {
       console.log(`✅ Server running on port ${PORT}`);
       console.log(`   ENV: ${process.env.NODE_ENV || 'development'}`);
